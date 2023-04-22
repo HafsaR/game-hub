@@ -15,6 +15,7 @@ const useData = <T>(endPoint: string, requestConfig?: AxiosRequestConfig, deps?:
 
   useEffect(() => {
     const controller = new AbortController();
+    setLoading(true)
     apiClient
       .get<FetchResponse<T>>(endPoint, { signal: controller.signal, ...requestConfig })
       .then((res) => {
@@ -24,6 +25,7 @@ const useData = <T>(endPoint: string, requestConfig?: AxiosRequestConfig, deps?:
       .catch((err) => {
         if (err instanceof CanceledError) return;
         setError(err.message);
+        setLoading(false)
       });
 
     return () => controller.abort();
